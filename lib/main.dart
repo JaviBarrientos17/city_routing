@@ -69,6 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   }
                 },
               )
+            // TODO - Revisar porque no renderiza bien los datos de la API. En consola los devuelve correctamente
           ],
         ),
       ),
