@@ -1,54 +1,69 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:archive/archive.dart';
 
-class HorariosPage extends StatefulWidget {
-  @override
-  _HorariosPageState createState() => _HorariosPageState();
+void main() {
+  runApp(const MyApp());
 }
 
-class _HorariosPageState extends State<HorariosPage> {
-  final String zipUrl =
-      'https://ssl.renfe.com/ftransit/Fichero_CER_FOMENTO/fomento_transit.zip';
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
-  Future<void> fetchAndProcessData() async {
-    final response = await http.get(Uri.parse(zipUrl));
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
+      ),
+      home: const MyHomePage(title: 'City Routing'),
+    );
+  }
+}
 
-    if (response.statusCode == 200) {
-      final bytes = response.bodyBytes;
-      final archive = ZipDecoder().decodeBytes(bytes);
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key, required this.title});
 
-      for (final file in archive) {
-        if (file.isFile) {
-          // Procesa el contenido de cada archivo dentro del ZIP
-          final fileContent = String.fromCharCodes(file.content);
-          print('Contenido del archivo ${file.name}: $fileContent');
-        }
-      }
-    } else {
-      print('Error en la solicitud: ${response.statusCode}');
-    }
+  final String title;
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  int _counter = 0;
+
+  void _incrementCounter() {
+    setState(() {
+      _counter++;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Horarios de trenes'),
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: Text(widget.title),
       ),
       body: Center(
-        child: ElevatedButton(
-          onPressed: fetchAndProcessData,
-          child: Text('Descargar y procesar horarios'),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Text(
+              'You have pushed the button this many times:',
+            ),
+            Text(
+              '$_counter',
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+          ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _incrementCounter,
+        tooltip: 'Increment',
+        child: const Icon(Icons.add),
       ),
     );
   }
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: HorariosPage(),
-  ));
 }
