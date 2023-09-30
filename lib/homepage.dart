@@ -61,10 +61,10 @@ class _HomePageState extends State<HomePage> {
               .d("Results field is missing or not a List in the API response");
         }
       } else {
-        logger.d("Failed to load data from the API");
+        logger.e("Failed to load data from the API");
       }
     } catch (e) {
-      logger.d("Error: $e");
+      logger.e("Error: $e");
     }
   }
 
