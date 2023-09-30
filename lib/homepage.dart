@@ -37,12 +37,12 @@ class _HomePageState extends State<HomePage> {
               stop_name: eachData['stopName'] ?? '',
               stop_id: eachData['stopId'] ?? '',
               arrival_time: eachData['arrivalTime'] ?? '',
-              departure_time: eachData['departure'] ?? '',
+              departure_time: eachData['departure_time'] ?? '',
               exception_type: eachData['exceptionType'] ?? 0,
               stop_sequence: eachData['stopSequence'] ?? 0,
               shape_id: eachData['shapeId'] ?? 0,
               timepoint: eachData['timepoint'] ?? 0,
-              route_long_name: eachData['routeLongName'] ?? '',
+              route_long_name: eachData['route_long_name'] ?? '',
               route_type: eachData['routeType'] ?? 0,
               route_url: eachData['routeUrl'] ?? '',
               route_color: eachData['routeColor'] ?? '',
@@ -53,8 +53,6 @@ class _HomePageState extends State<HomePage> {
             );
             recordsList.add(record);
           }
-          //print('Records: ${recordsList.length}');
-          print(response.body);
           setState(
               () {}); // Notificar a la interfaz de usuario que se actualice
         } else {
@@ -91,7 +89,11 @@ class _HomePageState extends State<HomePage> {
               },
               itemBuilder: (context, index) {
                 return ListTile(
-                  title: Text(recordsList[index].route_short_name),
+                  leading: Text(recordsList[index].route_short_name),
+                  title: Text(recordsList[index].route_long_name),
+                  subtitle: Text(recordsList[index].departure_time),
+                  trailing:
+                      Text(recordsList[index].wheelchair_boarding.toString()),
                 );
               },
             ),
