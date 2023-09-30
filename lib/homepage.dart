@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:city_routing/model/records.dart';
+import 'package:logger/logger.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -13,9 +14,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  var logger = Logger();
   List<Records> recordsList = [];
 
-  // Get FGC Data
+  // Get FGC API data
   Future<void> getFGCData() async {
     try {
       var response = await http.get(
@@ -53,16 +55,16 @@ class _HomePageState extends State<HomePage> {
             );
             recordsList.add(record);
           }
-          setState(
-              () {}); // Notificar a la interfaz de usuario que se actualice
+          setState(() {});
         } else {
-          print("Results field is missing or not a List in the API response");
+          logger
+              .d("Results field is missing or not a List in the API response");
         }
       } else {
-        print("Failed to load data from the API");
+        logger.d("Failed to load data from the API");
       }
     } catch (e) {
-      print("Error: $e");
+      logger.d("Error: $e");
     }
   }
 
