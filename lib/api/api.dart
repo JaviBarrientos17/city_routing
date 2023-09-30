@@ -8,6 +8,8 @@ class ApiService {
     final List<Records> recordsList = [];
     var logger = Logger();
 
+    // TODO - Crear un método fetch como este para cada una de las líneas para evitar problemas
+
     try {
       var response = await http.get(
         Uri.https(
