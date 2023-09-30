@@ -1,6 +1,7 @@
-// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api, prefer_const_constructors_in_immutables
+// ignore_for_file: prefer_const_constructors, unnecessary_null_comparison, library_private_types_in_public_api, prefer_const_constructors_in_immutables
 
 import 'dart:convert';
+import 'package:city_routing/model/routeImgManager.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:city_routing/model/records.dart';
@@ -90,15 +91,58 @@ class _HomePageState extends State<HomePage> {
                 return Divider();
               },
               itemBuilder: (context, index) {
+                final routeShortName = recordsList[index].route_short_name;
+                final wheelchairBoarding =
+                    recordsList[index].wheelchair_boarding;
+
+                Icon icon;
+                Color iconColor;
+
+                if (wheelchairBoarding == 1) {
+                  icon = Icon(Icons.accessible);
+                  iconColor = Colors.black;
+                } else {
+                  icon = Icon(Icons.not_accessible);
+                  iconColor = Colors.black;
+                }
+
                 return ListTile(
-                  leading: Text(recordsList[index].route_short_name),
+                  leading: Image.network(
+                      RouteImageManager.getImageUrl(routeShortName)),
                   title: Text(recordsList[index].route_long_name),
-                  subtitle: Text(recordsList[index].departure_time),
-                  trailing:
-                      Text(recordsList[index].wheelchair_boarding.toString()),
+                  subtitle: Text(
+                    _formatTime(recordsList[index].departure_time),
+                  ),
+                  trailing: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Icon(
+                        icon.icon,
+                        color: iconColor,
+                      ),
+                    ],
+                  ),
                 );
               },
             ),
     );
+  }
+
+  String _formatTime(String fullTime) {
+    if (fullTime == null || fullTime.isEmpty) {
+      return '';
+    }
+
+    final parts = fullTime.split(':');
+    if (parts.length != 3) {
+      return '';
+    }
+
+    final hours = parts[0];
+    final minutes = parts[1];
+
+    final formattedTime = '$hours:$minutes';
+
+    return formattedTime;
   }
 }
