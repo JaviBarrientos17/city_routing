@@ -12,7 +12,7 @@ class RouteImageManager {
       case "S1":
         return "URL_de_imagen_S1";
       case "R6":
-        return "URL_de_imagen_R6";
+        return "https://www.fgc.cat/wp-content/uploads/2020/06/icons-45-px-lines-fgc-r-6.png";
       case "R5":
         return "https://www.fgc.cat/wp-content/uploads/2020/06/icons-45-px-lines-fgc-r-5.png";
       case "S4":
