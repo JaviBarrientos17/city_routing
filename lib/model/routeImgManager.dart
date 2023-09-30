@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 class RouteImageManager {
   static String getImageUrl(String routeShortName) {
     switch (routeShortName) {

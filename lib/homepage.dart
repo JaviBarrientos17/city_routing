@@ -1,11 +1,11 @@
-// ignore_for_file: prefer_const_constructors, unnecessary_null_comparison, library_private_types_in_public_api, prefer_const_constructors_in_immutables
+// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api, prefer_const_constructors_in_immutables
 
-import 'dart:convert';
-import 'package:city_routing/model/routeImgManager.dart';
+import 'package:city_routing/api/api.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:city_routing/model/routeImgManager.dart';
 import 'package:city_routing/model/records.dart';
 import 'package:logger/logger.dart';
+import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -15,64 +15,73 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  var logger = Logger();
   List<Records> recordsList = [];
-
-  // Get FGC API data
-  Future<void> getFGCData() async {
-    try {
-      var response = await http.get(
-        Uri.https(
-          "dadesobertes.fgc.cat",
-          "/api/explore/v2.1/catalog/datasets/viajes-de-hoy/records",
-        ),
-      );
-
-      if (response.statusCode == 200) {
-        var jsonData = jsonDecode(response.body);
-
-        if (jsonData.containsKey('results') && jsonData['results'] is List) {
-          for (var eachData in jsonData['results']) {
-            final record = Records(
-              date: eachData['date'] ?? '',
-              route_short_name: eachData['route_short_name'] ?? '',
-              trip_headsign: eachData['tripHeadsign'] ?? '',
-              stop_name: eachData['stopName'] ?? '',
-              stop_id: eachData['stopId'] ?? '',
-              arrival_time: eachData['arrivalTime'] ?? '',
-              departure_time: eachData['departure_time'] ?? '',
-              exception_type: eachData['exceptionType'] ?? 0,
-              stop_sequence: eachData['stopSequence'] ?? 0,
-              shape_id: eachData['shapeId'] ?? 0,
-              timepoint: eachData['timepoint'] ?? 0,
-              route_long_name: eachData['route_long_name'] ?? '',
-              route_type: eachData['routeType'] ?? 0,
-              route_url: eachData['routeUrl'] ?? '',
-              route_color: eachData['routeColor'] ?? '',
-              route_text_color: eachData['routeTextColor'] ?? '',
-              stop_lat: eachData['stopLat'] ?? 0.0,
-              stop_lon: eachData['stopLon'] ?? 0.0,
-              wheelchair_boarding: eachData['wheelchairBoarding'] ?? 0,
-            );
-            recordsList.add(record);
-          }
-          setState(() {});
-        } else {
-          logger
-              .d("Results field is missing or not a List in the API response");
-        }
-      } else {
-        logger.e("Failed to load data from the API");
-      }
-    } catch (e) {
-      logger.e("Error: $e");
-    }
-  }
+  var logger = Logger();
+  DateFormat dateFormat = DateFormat('dd-MM-yyyy');
 
   @override
   void initState() {
     super.initState();
-    getFGCData();
+    _fetchFGCData();
+  }
+
+  Future<void> _fetchFGCData() async {
+    final data = await ApiService.getFGCData();
+    setState(() {
+      final currentTime = DateTime.now();
+      recordsList = data
+          .where((record) => _isDepartureTimeAfterCurrentTime(
+              record.departure_time, currentTime))
+          .toList();
+      recordsList.sort(
+          (a, b) => _compareDepartureTimes(a.departure_time, b.departure_time));
+    });
+  }
+
+  bool _isDepartureTimeAfterCurrentTime(
+      String departureTime, DateTime currentTime) {
+    final departureParts = departureTime.split(':');
+    final departureHour = int.tryParse(departureParts[0]);
+    final departureMinute = int.tryParse(departureParts[1]);
+
+    if (departureHour != null && departureMinute != null) {
+      final departureDateTime = DateTime(
+        currentTime.year,
+        currentTime.month,
+        currentTime.day,
+        departureHour,
+        departureMinute,
+      );
+
+      return departureDateTime.isAfter(currentTime);
+    }
+
+    return false;
+  }
+
+  int _compareDepartureTimes(String time1, String time2) {
+    final time1Parts = time1.split(':');
+    final time2Parts = time2.split(':');
+
+    final hour1 = int.parse(time1Parts[0]);
+    final minute1 = int.parse(time1Parts[1]);
+
+    final hour2 = int.parse(time2Parts[0]);
+    final minute2 = int.parse(time2Parts[1]);
+
+    if (hour1 < hour2) {
+      return -1;
+    } else if (hour1 > hour2) {
+      return 1;
+    } else {
+      if (minute1 < minute2) {
+        return -1;
+      } else if (minute1 > minute2) {
+        return 1;
+      } else {
+        return 0;
+      }
+    }
   }
 
   @override
@@ -85,11 +94,8 @@ class _HomePageState extends State<HomePage> {
           ? Center(
               child: CircularProgressIndicator(),
             )
-          : ListView.separated(
+          : ListView.builder(
               itemCount: recordsList.length,
-              separatorBuilder: (BuildContext context, int index) {
-                return Divider();
-              },
               itemBuilder: (context, index) {
                 final routeShortName = recordsList[index].route_short_name;
                 final wheelchairBoarding =
@@ -106,43 +112,43 @@ class _HomePageState extends State<HomePage> {
                   iconColor = Colors.black;
                 }
 
-                return ListTile(
-                  leading: Image.network(
-                      RouteImageManager.getImageUrl(routeShortName)),
-                  title: Text(recordsList[index].route_long_name),
-                  subtitle: Text(
-                    _formatTime(recordsList[index].departure_time),
-                  ),
-                  trailing: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(
-                        icon.icon,
-                        color: iconColor,
+                final recordDate = recordsList[index].date;
+                final formattedDate =
+                    dateFormat.format(DateTime.parse(recordDate));
+
+                final showDateSeparator = index == 0 ||
+                    formattedDate !=
+                        dateFormat.format(
+                            DateTime.parse(recordsList[index - 1].date));
+
+                return Column(
+                  children: <Widget>[
+                    if (showDateSeparator)
+                      ListTile(
+                        title: Text(
+                          formattedDate,
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
                       ),
-                    ],
-                  ),
+                    ListTile(
+                      leading: Image.network(
+                          RouteImageManager.getImageUrl(routeShortName)),
+                      title: Text(recordsList[index].route_long_name),
+                      subtitle: Text(recordsList[index].departure_time),
+                      trailing: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Icon(
+                            icon.icon,
+                            color: iconColor,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 );
               },
             ),
     );
-  }
-
-  String _formatTime(String fullTime) {
-    if (fullTime == null || fullTime.isEmpty) {
-      return '';
-    }
-
-    final parts = fullTime.split(':');
-    if (parts.length != 3) {
-      return '';
-    }
-
-    final hours = parts[0];
-    final minutes = parts[1];
-
-    final formattedTime = '$hours:$minutes';
-
-    return formattedTime;
   }
 }

@@ -1,24 +1,60 @@
-// import 'package:city_routing/model/records.dart';
-// import 'package:http/http.dart' as http;
-// import 'dart:convert';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:city_routing/model/records.dart';
+import 'package:logger/logger.dart';
 
-// Future<Records> fetchData() async {
-//   try {
-//     final response = await http.get(Uri.parse(
-//         'https://dadesobertes.fgc.cat/api/explore/v2.1/catalog/datasets/viajes-de-hoy/records'));
+class ApiService {
+  static Future<List<Records>> getFGCData() async {
+    final List<Records> recordsList = [];
+    var logger = Logger();
 
-//     if (response.statusCode == 200) {
-//       // Imprimir los datos del response en la consola
-//       print('Response body: ${response.body}');
+    try {
+      var response = await http.get(
+        Uri.https(
+          "dadesobertes.fgc.cat",
+          "/api/explore/v2.1/catalog/datasets/viajes-de-hoy/records",
+        ),
+      );
 
-//       return Records.fromJson(jsonDecode(response.body));
-//     } else {
-//       // Si el estado de la respuesta no es 200, lanza una excepción
-//       throw Exception('Failed to load records');
-//     }
-//   } catch (e) {
-//     // Captura y maneja cualquier excepción que ocurra durante la solicitud
-//     print('Error al obtener datos: $e');
-//     rethrow; // Relanza la excepción para que pueda ser manejada en el código que llama a fetchData
-//   }
-// }
+      if (response.statusCode == 200) {
+        var jsonData = jsonDecode(response.body);
+
+        if (jsonData.containsKey('results') && jsonData['results'] is List) {
+          for (var eachData in jsonData['results']) {
+            final record = Records(
+              date: eachData['date'] ?? '',
+              route_short_name: eachData['route_short_name'] ?? '',
+              trip_headsign: eachData['tripHeadsign'] ?? '',
+              stop_name: eachData['stopName'] ?? '',
+              stop_id: eachData['stopId'] ?? '',
+              arrival_time: eachData['arrivalTime'] ?? '',
+              departure_time: eachData['departure_time'] ?? '',
+              exception_type: eachData['exceptionType'] ?? 0,
+              stop_sequence: eachData['stopSequence'] ?? 0,
+              shape_id: eachData['shapeId'] ?? 0,
+              timepoint: eachData['timepoint'] ?? 0,
+              route_long_name: eachData['route_long_name'] ?? '',
+              route_type: eachData['routeType'] ?? 0,
+              route_url: eachData['routeUrl'] ?? '',
+              route_color: eachData['routeColor'] ?? '',
+              route_text_color: eachData['routeTextColor'] ?? '',
+              stop_lat: eachData['stopLat'] ?? 0.0,
+              stop_lon: eachData['stopLon'] ?? 0.0,
+              wheelchair_boarding: eachData['wheelchairBoarding'] ?? 0,
+            );
+            recordsList.add(record);
+          }
+        } else {
+          logger
+              .d("Results field is missing or not a List in the API response");
+        }
+      } else {
+        logger.e("Failed to load data from the API");
+      }
+    } catch (e) {
+      logger.e("Error: $e");
+    }
+
+    return recordsList;
+  }
+}
