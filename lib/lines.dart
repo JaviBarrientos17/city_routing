@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, sized_box_for_whitespace
 
 import 'package:city_routing/lines/fgc/llobregat-anoia/r5.dart';
+import 'package:city_routing/lines/fgc/llobregat-anoia/r50.dart';
+import 'package:city_routing/lines/fgc/llobregat-anoia/r6.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -31,9 +33,7 @@ class Lines extends StatelessWidget {
             'https://bit.ly/48xlpYS',
           ];
 
-          List<Widget> destinationPages = [
-            R5_Line(),
-          ];
+          List<Widget> destinationPages = [R5_Line(), R50_Line(), R6_Line()];
 
           return GestureDetector(
             onTap: () {
