@@ -8,15 +8,15 @@ import 'package:logger/logger.dart';
 import 'package:intl/intl.dart';
 
 void main() {
-  runApp(R50_Line());
+  runApp(R5_Line());
 }
 
-class R50_Line extends StatefulWidget {
+class R5_Line extends StatefulWidget {
   @override
-  _R50_LineState createState() => _R50_LineState();
+  _R5_LineState createState() => _R5_LineState();
 }
 
-class _R50_LineState extends State<R50_Line> {
+class _R5_LineState extends State<R5_Line> {
   List<Records> recordsList = [];
   var logger = Logger();
   DateFormat dateFormat = DateFormat('dd-MM-yyyy');
@@ -25,7 +25,7 @@ class _R50_LineState extends State<R50_Line> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(child: Text('FGC R50', textAlign: TextAlign.center)),
+        title: Center(child: Text('R5', textAlign: TextAlign.center)),
       ),
       body: FutureBuilder(
         future: _fetchFGCData(),
