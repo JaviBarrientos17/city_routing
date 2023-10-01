@@ -103,6 +103,13 @@ class _S4_LineState extends State<S4_Line> {
     }
   }
 
+  String _formatTime(String time) {
+    final parts = time.split(':');
+    final hour = parts[0];
+    final minute = parts[1];
+    return '$hour:$minute';
+  }
+
   Widget _buildList() {
     return Center(
       child: ListView.builder(
@@ -130,6 +137,9 @@ class _S4_LineState extends State<S4_Line> {
                   dateFormat
                       .format(DateTime.parse(recordsList[index - 1].date));
 
+          final departureTime = recordsList[index].departure_time;
+          final formattedTime = _formatTime(departureTime);
+
           return Column(
             children: <Widget>[
               if (showDateSeparator)
@@ -143,7 +153,7 @@ class _S4_LineState extends State<S4_Line> {
                 leading: Image.network(
                     RouteImageManager.getImageUrl(routeShortName)),
                 title: Text(recordsList[index].route_long_name),
-                subtitle: Text(recordsList[index].departure_time),
+                subtitle: Text(formattedTime),
                 trailing: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[

@@ -8,15 +8,15 @@ import 'package:logger/logger.dart';
 import 'package:intl/intl.dart';
 
 void main() {
-  runApp(R5_Line());
+  runApp(S8_Line());
 }
 
-class R5_Line extends StatefulWidget {
+class S8_Line extends StatefulWidget {
   @override
-  _R5_LineState createState() => _R5_LineState();
+  _S8_LineState createState() => _S8_LineState();
 }
 
-class _R5_LineState extends State<R5_Line> {
+class _S8_LineState extends State<S8_Line> {
   List<Records> recordsList = [];
   var logger = Logger();
   DateFormat dateFormat = DateFormat('dd-MM-yyyy');
@@ -25,7 +25,7 @@ class _R5_LineState extends State<R5_Line> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(child: Text('R5', textAlign: TextAlign.center)),
+        title: Center(child: Text('S8', textAlign: TextAlign.center)),
       ),
       body: FutureBuilder(
         future: _fetchFGCData(),
@@ -47,7 +47,7 @@ class _R5_LineState extends State<R5_Line> {
   }
 
   Future<void> _fetchFGCData() async {
-    final data = await ApiService.fetchDataForRoute("R5");
+    final data = await ApiService.fetchDataForRoute("S8");
     final currentTime = DateTime.now();
     recordsList = data
         .where((record) => _isDepartureTimeAfterCurrentTime(
@@ -137,7 +137,6 @@ class _R5_LineState extends State<R5_Line> {
                   dateFormat
                       .format(DateTime.parse(recordsList[index - 1].date));
 
-          // Formatea la hora sin los segundos
           final departureTime = recordsList[index].departure_time;
           final formattedTime = _formatTime(departureTime);
 
