@@ -28,7 +28,6 @@ class HomePage extends StatelessWidget {
           color: Colors.black, // Color de fondo negro
           child: GestureDetector(
             onTap: () {
-              // Navegar a la página de detalles cuando se hace clic en la imagen
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => Lines(),
