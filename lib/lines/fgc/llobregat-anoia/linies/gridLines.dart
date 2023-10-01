@@ -4,6 +4,7 @@ import 'package:city_routing/lines/fgc/llobregat-anoia/linies/r5.dart';
 import 'package:city_routing/lines/fgc/llobregat-anoia/linies/r6.dart';
 import 'package:city_routing/lines/fgc/llobregat-anoia/linies/s3.dart';
 import 'package:city_routing/lines/fgc/llobregat-anoia/linies/s4.dart';
+import 'package:city_routing/model/routeImgManager.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -24,12 +25,12 @@ class GridLines extends StatelessWidget {
         ),
         itemCount: 4,
         itemBuilder: (context, index) {
-          // TODO - Obtener las imgs del método routeImageManager()
+          List<String> routeShortNames = ["R5", "R6", "S3", "S4"];
           List<String> imageUrls = [
-            'https://bit.ly/46tkIxZ',
-            'https://bit.ly/45fbTXk',
-            'https://bit.ly/46wpJG4',
-            'https://bit.ly/45cQLkz'
+            RouteImageManager.getImageUrl(routeShortNames[0]),
+            RouteImageManager.getImageUrl(routeShortNames[1]),
+            RouteImageManager.getImageUrl(routeShortNames[2]),
+            RouteImageManager.getImageUrl(routeShortNames[3]),
           ];
 
           List<Widget> destinationPages = [
