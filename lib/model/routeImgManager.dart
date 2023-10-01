@@ -12,11 +12,11 @@ class RouteImageManager {
       case "S1":
         return "URL_de_imagen_S1";
       case "R6":
-        return "https://www.fgc.cat/wp-content/uploads/2020/06/icons-45-px-lines-fgc-r-6.png";
+        return "https://bit.ly/45fbTXk";
       case "R5":
-        return "https://www.fgc.cat/wp-content/uploads/2020/06/icons-45-px-lines-fgc-r-5.png";
+        return "https://bit.ly/46tkIxZ";
       case "S4":
-        return "URL_de_imagen_S4";
+        return "https://bit.ly/45cQLkz";
       case "L8":
         return "URL_de_imagen_L8";
       case "FV":
@@ -24,7 +24,7 @@ class RouteImageManager {
       case "S8":
         return "URL_de_imagen_S8";
       case "S3":
-        return "URL_de_imagen_S3";
+        return "https://bit.ly/46wpJG4";
       case "L12":
         return "URL_de_imagen_L12";
       case "MM":
