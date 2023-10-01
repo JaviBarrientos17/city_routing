@@ -25,7 +25,7 @@ class HomePage extends StatelessWidget {
       ),
       body: Center(
         child: Container(
-          color: Colors.black, // Color de fondo negro
+          color: Colors.black,
           child: GestureDetector(
             onTap: () {
               Navigator.of(context).push(
