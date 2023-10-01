@@ -47,7 +47,7 @@ class _R5_LineState extends State<R5_Line> {
   }
 
   Future<void> _fetchFGCData() async {
-    final data = await ApiService.getFGCData();
+    final data = await ApiService.fetchDataForRoute("R5");
     final currentTime = DateTime.now();
     recordsList = data
         .where((record) => _isDepartureTimeAfterCurrentTime(

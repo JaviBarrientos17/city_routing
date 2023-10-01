@@ -4,17 +4,18 @@ import 'package:city_routing/model/records.dart';
 import 'package:logger/logger.dart';
 
 class ApiService {
-  static Future<List<Records>> getFGCData() async {
+  static Future<List<Records>> fetchDataForRoute(String routeShortName) async {
     final List<Records> recordsList = [];
     var logger = Logger();
-
-    // TODO - Crear un método fetch como este para cada una de las líneas para evitar problemas
 
     try {
       var response = await http.get(
         Uri.https(
           "dadesobertes.fgc.cat",
           "/api/explore/v2.1/catalog/datasets/viajes-de-hoy/records",
+          {
+            "refine": "route_short_name:$routeShortName",
+          },
         ),
       );
 
