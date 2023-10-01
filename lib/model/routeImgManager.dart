@@ -22,7 +22,7 @@ class RouteImageManager {
       case "FV":
         return "URL_de_imagen_FV";
       case "S8":
-        return "URL_de_imagen_S8";
+        return "https://bit.ly/3PvNuXG";
       case "S3":
         return "https://bit.ly/46wpJG4";
       case "L12":
@@ -39,6 +39,8 @@ class RouteImageManager {
         return "URL_de_imagen_R63";
       case "R53":
         return "URL_de_imagen_R53";
+      case "S9":
+        return "https://bit.ly/48xlpYS";
       default:
         return "URL_de_imagen_predeterminada";
     }
