@@ -10,10 +10,10 @@ import 'package:city_routing/model/routeImgManager.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(GridLines());
+  runApp(GridLinesG3());
 }
 
-class GridLines extends StatelessWidget {
+class GridLinesG3 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,17 +27,14 @@ class GridLines extends StatelessWidget {
         ),
         itemCount: 6,
         itemBuilder: (context, index) {
-          List<String> routeShortNames = ["R5", "R6", "S3", "S4", "S8", "S9"];
+          List<String> routeShortNames = ["RL1", "RL2"];
           List<String> imageUrls = [
             RouteImageManager.getImageUrl(routeShortNames[0]),
-            RouteImageManager.getImageUrl(routeShortNames[1]),
-            RouteImageManager.getImageUrl(routeShortNames[2]),
-            RouteImageManager.getImageUrl(routeShortNames[3]),
-            RouteImageManager.getImageUrl(routeShortNames[4]),
-            RouteImageManager.getImageUrl(routeShortNames[5]),
+            RouteImageManager.getImageUrl(routeShortNames[1])
           ];
 
           List<Widget> destinationPages = [
+            // TODO - Añadir lineas del G3
             R5_Line(),
             R6_Line(),
             S3_Line(),

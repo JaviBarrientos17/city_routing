@@ -30,11 +30,11 @@ class RouteImageManager {
       case "MM":
         return "URL_de_imagen_MM";
       case "RL1":
-        return "URL_de_imagen_RL1";
+        return "https://bit.ly/3LLF7GH";
       case "L1":
         return "URL_de_imagen_L1";
       case "RL2":
-        return "URL_de_imagen_RL2";
+        return "https://bit.ly/48ADtBj";
       case "R63":
         return "URL_de_imagen_R63";
       case "R53":
@@ -42,7 +42,7 @@ class RouteImageManager {
       case "S9":
         return "https://bit.ly/48xlpYS";
       default:
-        return "URL_de_imagen_predeterminada";
+        return "https://bit.ly/3Q3Pt7o";
     }
   }
 }

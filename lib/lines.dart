@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors
 
-import 'package:city_routing/lines/fgc/llobregat-anoia/linies/gridLines.dart';
+import 'package:city_routing/lines/fgc/barcelona-valles/gridLinesG1.dart';
+import 'package:city_routing/lines/fgc/lleida-la%20pobla%20de%20segur/gridLinesG3.dart';
+import 'package:city_routing/lines/fgc/llobregat-anoia/linies/gridLinesG2.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -23,7 +25,7 @@ class Lines extends StatelessWidget {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     // TODO - Cambiar a lineas de Barcelona - Vallés
-                    builder: (context) => GridLines(),
+                    builder: (context) => GridLinesG1(),
                   ),
                 );
               },
@@ -33,7 +35,7 @@ class Lines extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => GridLines(),
+                    builder: (context) => GridLinesG2(),
                   ),
                 );
               },
@@ -44,7 +46,7 @@ class Lines extends StatelessWidget {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     // TODO - Cambiar a lineas de Lleida - La Pobla
-                    builder: (context) => GridLines(),
+                    builder: (context) => GridLinesG3(),
                   ),
                 );
               },
